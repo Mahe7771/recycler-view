@@ -1,5 +1,6 @@
 package com.android.recyclerview;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.app.Fragment;
 
 public class TeamListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -62,24 +62,29 @@ public class TeamListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
         Fragment newFragment = null;
-        if (id == R.id.nav_menu1) {
-            Toast.makeText(this, "Menu 1", Toast.LENGTH_SHORT).show();
-            newFragment = new MainActivity();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame , newFragment);
-            transaction.commit();
-        } else if (id == R.id.nav_menu2) {
-            Toast.makeText(this, "Menu 2", Toast.LENGTH_SHORT).show();
-
-
-        } else if (id == R.id.nav_menu3) {
-            Toast.makeText(this, "Menu 3", Toast.LENGTH_SHORT).show();
+        switch(id){
+            case R.id.nav_menu1:
+                Toast.makeText(this, "Menu 1", Toast.LENGTH_SHORT).show();
+                newFragment = new MainActivity();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame , newFragment);
+                transaction.commit();
+                break;
+            case R.id.nav_menu2:
+                Toast.makeText(this, "Menu 2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_menu3:
+                Toast.makeText(this, "Menu 3", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Default", Toast.LENGTH_SHORT).show();
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

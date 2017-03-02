@@ -4,9 +4,7 @@ import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,8 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +29,7 @@ import java.util.List;
 
 public class MainActivity extends Fragment {
 
+    BitmapService bitmapService = new BitmapService();
     private RecyclerView horizontal_recycler_view;
     private ArrayList<File> horizontalList;
     private HorizontalAdapter horizontalAdapter;
@@ -139,59 +136,6 @@ public class MainActivity extends Fragment {
         }
         return false;
     }
-    public Bitmap getBitmapFromFile(File imgFile) {
-        if (imgFile.exists()) {
-
-//            Bitmap bmp = BitmapFactory.decodeFile(imgFile
-//                    .getAbsolutePath());
-            Bitmap bmp = subSampleImage(getActivity(), imgFile);
-
-            return bmp;
-        }
-        return null;
-    }
-
-    private Bitmap subSampleImage(Context context, File f) {
-        Bitmap bmp = null;
-
-        try {
-            final Resources res = context.getResources();
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeResourceStream(res,null, new FileInputStream(f), null, options);
-            options.inSampleSize = calculateInSampleSize(options, 150, 150);
-            options.inJustDecodeBounds = false;
-
-            bmp = BitmapFactory.decodeResourceStream(res, null, new FileInputStream(f), null, options);
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return bmp;
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 
 
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalViewHolder>  {
@@ -236,8 +180,8 @@ public class MainActivity extends Fragment {
                 }
             }
 
-            final Bitmap bitmap = getBitmapFromFile(imgFile);
-			imageView.setOnClickListener(new View.OnClickListener() {
+            final Bitmap bitmap = bitmapService.getBitmapFromFile(getContext(), imgFile, false);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     vertical_recycler_view = (RecyclerView) getView().findViewById(R.id.vertical_recycler_view);
@@ -279,7 +223,8 @@ public class MainActivity extends Fragment {
 
         @Override
         protected Bitmap doInBackground(File... params) {
-            Bitmap bmp = getBitmapFromFile(params[0]);
+            Log.d("SubSampling", "Adding to cache");
+            Bitmap bmp = bitmapService.getBitmapFromFile(getContext(), params[0], true);
             imgCache.addBitmapToCache(params[0].getName(), bmp);
             return bmp;
         }

@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     app:cardCornerRadius="5dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="#A9A9A9"
+    app:cardBackgroundColor="#D3D3D3"
     >
 
     <LinearLayout
@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:scaleType="centerCrop"
         android:onClick="onClick"/>
 

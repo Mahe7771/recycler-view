@@ -27,7 +27,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/horizontal_recycler_view"
-        android:background="#fff"
+        android:background="#D3D3D3"
         android:layout_width="match_parent"
-        android:layout_height="150dp"/>
+        android:layout_height="80dp"/>
 </LinearLayout>
