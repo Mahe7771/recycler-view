@@ -1,45 +1,47 @@
 package com.android.recyclerview;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Maheswari_V on 1/7/2017.
  */
 
 public class ImageDescriptor{
 
-    public String imgName;
-    public String tagName;
-    public String tagValue;
+    public String workOwner;
+    public String workLogTime;
+    public Bitmap workLogImage;
 
     public ImageDescriptor(){}
 
-    public ImageDescriptor(String imgName, String tagName, String tagValue)
+    public ImageDescriptor(String workOwner, String workLogTime, Bitmap workLogImage)
     {
-        this.imgName = imgName;
-        this.tagName = tagName;
-        this.tagValue = tagValue;
+        this.workOwner = workOwner;
+        this.workLogTime = workLogTime;
+        this.workLogImage = workLogImage;
     }
 
-    public void setImgName(String imgName) {
-        this.imgName = imgName;
+    public void setWorkOwner(String workOwner) {
+        this.workOwner = workOwner;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setWorkLogImage(Bitmap workLogImage) {
+        this.workLogImage = workLogImage;
     }
 
-    public void setTagValue(String tagValue) {
-        this.tagValue = tagValue;
+    public void setWorkLogTime(String workLogTime) {
+        this.workLogTime = workLogTime;
     }
 
-    public String getImgName() {
-        return imgName;
+    public String getWorkOwner() {
+        return workOwner;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getWorkLogTime() {
+        return workLogTime;
     }
 
-    public String getTagValue() {
-        return tagValue;
+    public Bitmap getWorkLogImage() {
+        return workLogImage;
     }
 }

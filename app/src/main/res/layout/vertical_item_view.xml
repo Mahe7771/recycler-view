@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewHeading"
+    <ImageView
+        android:id="@+id/workLogImage"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FFF"
-        android:background="#2F2F2F"
-        android:textStyle="bold"
-        android:visibility="visible" />
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/color_baloons" />
 
-    <TextView
-
-        android:textColor="#787878"
-        android:textSize="18sp"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:id="@+id/txtView"
-        android:hint="No value"
-        android:layout_width="fill_parent"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/empty_view"
+    <LinearLayout
+        style="@style/Banner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="Click on an image below to view details" />
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/workOwner"
+            style="@style/BannerItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:paddingLeft="4dp"
+            android:text="Suresh" />
+
+        <TextView
+            android:id="@+id/workLogTime"
+            style="@style/BannerItem"
+            android:layout_width="0dp"
+            android:paddingRight="4dp"
+            android:layout_weight=".25"
+            android:gravity="right|center_vertical"
+            android:text="6pm" />
+    </LinearLayout>
+</RelativeLayout>

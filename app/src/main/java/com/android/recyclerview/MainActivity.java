@@ -1,6 +1,7 @@
 package com.android.recyclerview;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -9,13 +10,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,13 +26,12 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Fragment {
 
     private RecyclerView horizontal_recycler_view;
     private ArrayList<File> horizontalList;
@@ -42,11 +40,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+        return inflater.inflate(R.layout.activity_main, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+        horizontal_recycler_view= (RecyclerView) getView().findViewById(R.id.horizontal_recycler_view);
         imgCache = ImageCache.getInstance(0.125f);
 
         horizontalList=new ArrayList<File>();
@@ -69,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        horizontalAdapter=new HorizontalAdapter(MainActivity.this,horizontalList);
+        horizontalAdapter=new HorizontalAdapter(getActivity(),horizontalList);
         LinearLayoutManager horizontalLayoutManager
-                = new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false);
+                = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
         horizontal_recycler_view.setHasFixedSize(true);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
@@ -80,19 +85,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void requestExternalStorageWritePermission() {
-        if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(MainActivity.this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             }
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
 //            Bitmap bmp = BitmapFactory.decodeFile(imgFile
 //                    .getAbsolutePath());
-            Bitmap bmp = subSampleImage(MainActivity.this, imgFile);
+            Bitmap bmp = subSampleImage(getActivity(), imgFile);
 
             return bmp;
         }
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final HorizontalViewHolder holder, final int position) {
-            File imgFile = horizontalList.get(position);
+            final File imgFile = horizontalList.get(position);
             ImageView imageView = holder.imgView;
             if (imageView!= null) {
 
@@ -231,28 +236,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            final String filename = imgFile.getAbsolutePath();
-
-            imageView.setOnClickListener(new View.OnClickListener() {
+            final Bitmap bitmap = getBitmapFromFile(imgFile);
+			imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    vertical_recycler_view = (RecyclerView) findViewById(R.id.vertical_recycler_view);
+                    vertical_recycler_view = (RecyclerView) getView().findViewById(R.id.vertical_recycler_view);
                     vertical_recycler_view.setHasFixedSize(true);
                     try {
-                        ExifInterface exif = new ExifInterface(filename);
-
                         verticalList = new ArrayList<>();
-
-                        verticalList.add(new ImageDescriptor(filename, "IMAGE_LENGTH", exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH )));
-                        verticalList.add(new ImageDescriptor(filename,"IMAGE_WIDTH",exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH)));
-                        verticalList.add(new ImageDescriptor(filename,"DATETIME",exif.getAttribute(ExifInterface.TAG_DATETIME)));
-                        verticalList.add(new ImageDescriptor(filename,"TAG_MAKE",exif.getAttribute(ExifInterface.TAG_MAKE)));
-                        verticalList.add(new ImageDescriptor(filename, "TAG_MODEL", exif.getAttribute(ExifInterface.TAG_MODEL)));
-                        verticalList.add(new ImageDescriptor(filename,"TAG_ORIENTATION",exif.getAttribute(ExifInterface.TAG_ORIENTATION)));
-                        verticalList.add(new ImageDescriptor(filename,"TAG_FLASH",exif.getAttribute(ExifInterface.TAG_FLASH)));
-
+                        verticalList.add(new ImageDescriptor("Suresh", "6 PM", bitmap));
                     }
-                    catch (IOException e) {
+                    catch (Exception e) {
                         System.out.println("Exception!!!");
                         e.printStackTrace();
                     }
@@ -265,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             });
-
 
         }
 

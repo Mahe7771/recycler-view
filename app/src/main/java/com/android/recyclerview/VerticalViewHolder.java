@@ -2,6 +2,7 @@ package com.android.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -9,12 +10,14 @@ import android.widget.TextView;
  */
 
 public class VerticalViewHolder extends RecyclerView.ViewHolder {
-    public TextView imgDescriptorTagView, imgDescriptorValueView, emptyView ;
+    public TextView workOwner, workLogTime ;
+    public ImageView workLogImage;
 
     public VerticalViewHolder(View view) {
         super(view);
-        imgDescriptorTagView = (TextView) view.findViewById(R.id.textViewHeading);
-        imgDescriptorValueView = (TextView) view.findViewById(R.id.txtView);
-        //emptyView = (TextView) view.findViewById(R.id.empty_view);
+        workOwner = (TextView) view.findViewById(R.id.workOwner);
+        workLogTime = (TextView) view.findViewById(R.id.workLogTime);
+        workLogImage = (ImageView) view.findViewById(R.id.workLogImage);
+
     }
 }

@@ -34,8 +34,9 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     @Override
     public void onBindViewHolder(final VerticalViewHolder holder, final int position) {
         ImageDescriptor imgDescriptor = verticalList.get(position);
-        holder.imgDescriptorTagView.setText(imgDescriptor.getTagName());
-        holder.imgDescriptorValueView.setText(imgDescriptor.getTagValue());
+        holder.workOwner.setText(imgDescriptor.getWorkOwner());
+        holder.workLogTime.setText(imgDescriptor.getWorkLogTime());
+        holder.workLogImage.setImageBitmap(imgDescriptor.getWorkLogImage());
         //holder.emptyView.setText("Click on an image below to view details");
     }
 
